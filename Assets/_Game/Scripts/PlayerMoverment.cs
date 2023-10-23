@@ -87,6 +87,8 @@ public class PlayerMoverment : MonoBehaviour
         if (moveHorizontal > 0f) isFacingRight = true;
         if (moveHorizontal < 0f) isFacingRight = false;
         Debug.Log(isFacingRight);
+
+        // Move up when climbing
         if (isClimb)
         {
             rb.velocity = (new Vector2(0f, 5f));
