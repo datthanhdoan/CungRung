@@ -9,14 +9,17 @@ public class DogAnimation : MonoBehaviour
 
     [SerializeField] private GameObject player;
     [SerializeField] private Animator anim;
-    private float distanceX = 10f, distance;
+    private float distanceX, distance;
     private PlayerMoverment playerMoverment;
     private DogMoverment dogmov;
     private int currentState;
-
-    private void Start()
+    private void Awake()
     {
         dogmov = FindObjectOfType<DogMoverment>();
+        distanceX = dogmov.getDistanceX();
+    }
+    private void Start()
+    {
 
         playerMoverment = player.GetComponent<PlayerMoverment>();
 

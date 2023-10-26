@@ -7,11 +7,14 @@ public class ArrowScript : MonoBehaviour
     private GameObject player;
     private Mob mob;
     private Rigidbody2D rb;
-    private float force = 10;
+    private float force = 15;
     private float timer;
+    private PlayerMoverment playerMoverment;
+
     // Start is called before the first frame update
     void Start()
     {
+        playerMoverment = FindObjectOfType<PlayerMoverment>();
         timer = 0;
         mob = FindObjectOfType<Mob>();
         rb = GetComponent<Rigidbody2D>();
@@ -27,9 +30,20 @@ public class ArrowScript : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        if (timer > 2)
+        if (timer > 1.2)
         {
             Destroy(gameObject);
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            playerMoverment.setDead(true);
+        }
+        if (collision.gameObject.CompareTag("Mob"))
+        {
+            mob.setDead(true);
         }
     }
 }
