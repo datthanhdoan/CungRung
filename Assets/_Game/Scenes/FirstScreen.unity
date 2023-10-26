@@ -472,9 +472,10 @@ GameObject:
   - component: {fileID: 543174731}
   - component: {fileID: 543174730}
   - component: {fileID: 543174732}
+  - component: {fileID: 543174733}
   m_Layer: 0
   m_Name: player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -602,6 +603,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &543174733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 543174728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89d6ff46ab2c56843a24a56bc78bfaf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 0}
 --- !u!1 &554787350
 GameObject:
   m_ObjectHideFlags: 0
@@ -1190,7 +1204,7 @@ GameObject:
   - component: {fileID: 1139326249}
   m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1342,33 +1356,16 @@ GameObject:
   m_Component:
   - component: {fileID: 1340992177}
   - component: {fileID: 1340992176}
+  - component: {fileID: 1340992179}
   - component: {fileID: 1340992175}
-  - component: {fileID: 1340992174}
-  m_Layer: 0
+  - component: {fileID: 1340992178}
+  m_Layer: 6
   m_Name: Dog
-  m_TagString: Untagged
+  m_TagString: Mob
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1340992174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1340992173}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db3d813f6d9ec7744aa52fa25ee4121e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 543174728}
-  rb: {fileID: 1340992175}
-  layerMark:
-    serializedVersion: 2
-    m_Bits: 256
-  animator: {fileID: 2099963131}
+  m_IsActive: 1
 --- !u!50 &1340992175
 Rigidbody2D:
   serializedVersion: 4
@@ -1414,7 +1411,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1340992173}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.91, y: -3.46, z: 0}
+  m_LocalPosition: {x: -17.98, y: -3.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1422,6 +1419,49 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1340992178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1340992173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5b44cbe7c607f84d887efea14246509, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 1340992175}
+  layerMark:
+    serializedVersion: 2
+    m_Bits: 256
+  distanceX: 10
+--- !u!61 &1340992179
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1340992173}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.7362051, y: 0.22217774}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.52890587, y: 0.63515186}
+  m_EdgeRadius: 0
 --- !u!1 &1358299512
 GameObject:
   m_ObjectHideFlags: 0
@@ -1835,6 +1875,7 @@ GameObject:
   - component: {fileID: 2099963132}
   - component: {fileID: 2099963131}
   - component: {fileID: 2099963130}
+  - component: {fileID: 2099963134}
   m_Layer: 0
   m_Name: dog
   m_TagString: Untagged
@@ -1872,8 +1913,8 @@ MonoBehaviour:
   - {fileID: 307775176}
   - {fileID: 1682424557}
   m_Bounds:
-    m_Center: {x: -0.011017203, y: 0.009367809, z: 0}
-    m_Extent: {x: 0.26761937, y: 0.22833183, z: 0}
+    m_Center: {x: -0.011017144, y: 0.009367868, z: 0}
+    m_Extent: {x: 0.2676193, y: 0.2283319, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
@@ -1966,3 +2007,17 @@ Transform:
   m_Father: {fileID: 1340992177}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2099963134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2099963129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15ecf33096ecd784fa1fdd80e74dfe03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1139326244}
+  anim: {fileID: 2099963131}

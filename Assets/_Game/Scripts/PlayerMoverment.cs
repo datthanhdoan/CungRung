@@ -5,7 +5,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerMoverment : MonoBehaviour
 {
@@ -28,7 +27,7 @@ public class PlayerMoverment : MonoBehaviour
     // animation
     [SerializeField] private Animator anim;
     private int currentState;
-    public bool IsDead()
+    public bool getDead()
     {
         return isDead;
 
@@ -61,16 +60,17 @@ public class PlayerMoverment : MonoBehaviour
 
     void Update()
     {
-        if (isDead) return;
+
         // state animation
         var state = GetState();
         if (state != currentState)
         {
-            anim.CrossFade(state, 0, 0);
+            if (currentState == Dead) return;
+            anim.CrossFade(state, 0.03f, 0);
             currentState = state;
 
         }
-
+        if (isDead) return;
         moveHorizontal = Input.GetAxisRaw("Horizontal");
         checkOnGround();
         checkAHead();
@@ -83,10 +83,10 @@ public class PlayerMoverment : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isDead) return;
         // for raycast direction
         if (moveHorizontal > 0f) isFacingRight = true;
         if (moveHorizontal < 0f) isFacingRight = false;
-        Debug.Log(isFacingRight);
 
         // Move up when climbing
         if (isClimb)
@@ -117,25 +117,18 @@ public class PlayerMoverment : MonoBehaviour
     #endregion
     private void checkOnGround()
     {
-        Vector2 rayOrigin = new Vector2(transform.position.x - width / 2, transform.position.y);
+        Vector2 rayOrigin = new Vector2(transform.position.x, transform.position.y);
+        float rayLength = height / 2 + 0.6f;
 
-        bool anyRaycastHit = false;
-
-        for (int i = 0; i < numberOfRays; i++)
+        RaycastHit2D[] hits = Physics2D.RaycastAll(rayOrigin, Vector2.down, rayLength, groundLayer);
+        foreach (RaycastHit2D hit in hits)
         {
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, height / 2 + 0.1f, groundLayer);
-            Debug.DrawRay(rayOrigin, Vector2.down * (height / 2 + 0.1f), Color.blue);
-            rayOrigin.x += spacingRays;
-
-            if (hit.collider != null)
-            {
-                anyRaycastHit = true;
-                break;
-            }
+            Debug.DrawRay(hit.point, Vector2.down * 0.1f, Color.blue);
         }
 
-        isGrounded = anyRaycastHit;
+        isGrounded = hits.Length > 0;
     }
+
 
 
     private void checkAHead()
@@ -150,7 +143,7 @@ public class PlayerMoverment : MonoBehaviour
         bool anyRaycastHit = false;
         int index = 0;
         // them 5 raycast cho chieu cao 
-        for (int i = 0; i < numberOfRays + 5; i++)
+        for (int i = 0; i < numberOfRays - 2; i++)
         {
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, direction, spacingRays, climbLayer);
             Debug.DrawRay(rayOrigin, direction * spacingRays, Color.blue);
@@ -164,9 +157,18 @@ public class PlayerMoverment : MonoBehaviour
 
         }
 
+        //  RaycastHit2D hitcap = Physics2D.CapsuleCast(transform.position, new Vector2(0.6f, 2), new CapsuleDirection2D(Vector2.one), 0, Vector2.right);
+
         isClimb = anyRaycastHit;
     }
-
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Mob"))
+    //    {
+    //        isDead = true;
+    //        Debug.Log("Player DEad");
+    //    }
+    //}
 
 
 }
