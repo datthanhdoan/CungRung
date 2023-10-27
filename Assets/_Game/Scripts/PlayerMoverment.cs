@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.UIElements;
+﻿using UnityEngine;
 
 public class PlayerMoverment : MonoBehaviour
 {
@@ -50,9 +44,8 @@ public class PlayerMoverment : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        moveSpeed = 600f;
+        moveSpeed = 500f;
         jumpForce = 25f;
-
         width = GetComponent<CapsuleCollider2D>().size.x;
         height = GetComponent<CapsuleCollider2D>().size.y;
         spacingRays = width / (numberOfRays - 1);
@@ -79,12 +72,6 @@ public class PlayerMoverment : MonoBehaviour
             rb.velocity = (new Vector2(rb.velocity.x, 1 * jumpForce));
             isGrounded = false;
         }
-    }
-
-    private void FixedUpdate()
-    {
-        if (isDead) return;
-        // for raycast direction
         if (moveHorizontal > 0f) isFacingRight = true;
         if (moveHorizontal < 0f) isFacingRight = false;
 
@@ -101,6 +88,12 @@ public class PlayerMoverment : MonoBehaviour
             //cach nay kha la lag
             //transform.Translate(new Vector2(moveHorizontal, moveVertical) * moveSpeed * Time.deltaTime);
         }
+    }
+
+    private void FixedUpdate()
+    {
+        // for raycast direction
+
         //if (isClimb)
         //{
         //    rb.velocity = new Vector2(rb.velocity.x, 3f);
