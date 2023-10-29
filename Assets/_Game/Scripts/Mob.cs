@@ -1,11 +1,11 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Mob : MonoBehaviour
+public class Mob : MonoBehaviour, IDieable
 {
 
     private bool playIsDead;
@@ -14,10 +14,11 @@ public class Mob : MonoBehaviour
     public Rigidbody2D rb;
     public LayerMask layerMark;
     [SerializeField] private float distanceX;
-    private float speed = 12.5f;
-    private float distance;
+    private float distanceY, deltaX, deltaY;
+    private float speed;
+    private float distance, direction;
     private bool isFacingRight = true;
-    private bool isDead = false;
+    private bool isDead = false, isRunning = false;
     private float length;
 
     public float getDistance()
@@ -34,11 +35,15 @@ public class Mob : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         length = GetComponent<Collider2D>().bounds.size.x;
         playerMoverment = FindObjectOfType<PlayerMoverment>();
+        speed = 500f;
     }
-
-    public void setDead(bool dead)
+    public bool getIsRunning()
     {
-        isDead = dead;
+        return isRunning;
+    }
+    public void setDead(bool isDead)
+    {
+        this.isDead = isDead;
     }
     public bool getDead()
     {
@@ -48,27 +53,38 @@ public class Mob : MonoBehaviour
     private void FixedUpdate()
     {
 
-        distance = Vector2.Distance(transform.position, player.transform.position);
+        distanceY = distanceX / 2;
 
+        Vector2 objectPosition = transform.position;
+        Vector2 playerPosition = player.transform.position;
+        deltaX = Mathf.Abs(objectPosition.x - playerPosition.x);
 
-        if (distance <= distanceX)
+        deltaY = Mathf.Abs(objectPosition.y - playerPosition.y);
+
+        if ((deltaX * deltaX) / (distanceX * distanceX) + (deltaY * deltaY) / (distanceY * distanceY) <= 1)
         {
             if (playerMoverment.getDead()) return;
-            //moverment
-            Vector2 target = new Vector2(player.transform.position.x, rb.position.y);
-            Vector2 newPos = Vector2.MoveTowards(rb.position, target, speed * Time.fixedDeltaTime);
-            rb.MovePosition(newPos);
-            if (transform.position.x < player.transform.position.x && !isFacingRight)
+            isRunning = true;
+            Vector2 target = new Vector2(playerPosition.x, objectPosition.y);
+
+
+            direction = objectPosition.x < playerPosition.x ? 1 : -1;
+
+            rb.velocity = new Vector2(direction * Time.fixedDeltaTime * speed, rb.velocity.y);
+            if (objectPosition.x < playerPosition.x && !isFacingRight)
             {
                 Flip();
             }
-            else if (transform.position.x > player.transform.position.x && isFacingRight)
+            else if (objectPosition.x > playerPosition.x && isFacingRight)
             {
                 Flip();
-
             }
-
-
+        }
+        else
+        {
+            isRunning = false;
+            float deceleration = 1.5f;
+            rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0, deceleration * Time.deltaTime), rb.velocity.y);
         }
 
     }

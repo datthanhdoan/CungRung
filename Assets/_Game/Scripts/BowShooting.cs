@@ -21,10 +21,10 @@ public class BowShooting : MonoBehaviour
     void Update()
     {
         float distance = Vector2.Distance(transform.position, player.transform.position);
-        if (distance < 15)
+        if (distance < 30)
         {
             timer += Time.deltaTime;
-            if (timer > 2)
+            if (timer > 1)
             {
                 timer = 0;
                 Shoot();

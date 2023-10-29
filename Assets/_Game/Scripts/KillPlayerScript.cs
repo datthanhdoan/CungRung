@@ -6,34 +6,17 @@ using UnityEngine.UIElements;
 
 public class KillPlayerScript : MonoBehaviour
 {
-    public LayerMask layerMark;
-    private float numberOfRays = 5;
-    private float length;
-    private float spacing;
-    private void Start()
+    private PlayerMoverment playerMoverment;
+    protected virtual void Start()
     {
-        length = GetComponent<SpriteRenderer>().bounds.size.x;
-        spacing = length / numberOfRays;
+        playerMoverment = FindObjectOfType<PlayerMoverment>();
     }
-
-    private void FixedUpdate()
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        Vector2 rayOrigin = new Vector2(transform.position.x - (numberOfRays - 1) * spacing / 2, transform.position.y);
-
-        for (int i = 0; i < numberOfRays; i++)
+        if (collision.gameObject.CompareTag("Player"))
         {
-
-            Vector2 rayDirection = Vector2.up;
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, 0.1f, layerMark);
-
-            Debug.DrawRay(rayOrigin, rayDirection * 0.3f, Color.red);
-
-            if (hit)
-            {
-                //playerAnimator.setDead(true);
-            }
-
-            rayOrigin.x += spacing;
+            bool x = true;
+            playerMoverment.setDead(x);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PlayerMoverment : MonoBehaviour
+public class PlayerMoverment : MonoBehaviour, IDieable
 {
     // Start is called before the first frame update
     public Rigidbody2D rb;
@@ -12,12 +12,21 @@ public class PlayerMoverment : MonoBehaviour
     private float moveHorizontal;
     private bool isDead = false;
     private bool isFacingRight = true;
+    private bool isShift = false;
+    //private Vector3 m_Velocity = Vector3.zero;
+    //[Range(0, .3f)][SerializeField] private float m_MovementSmoothing = .05f;
+    private Transform characterTransform;
+    private CapsuleCollider2D capsuleCollider;
+    private Vector2 defaultColliderSize;
+    public float ShiftedColliderHeight = 0.7f;
     // Climd , ladder
     private bool isClimb = false;
     private float width, height;
     private float numberOfRays = 5;
     private float spacingRays;
     private bool isGrounded = true;
+    float slowMove;
+
     // animation
     [SerializeField] private Animator anim;
     private int currentState;
@@ -26,16 +35,17 @@ public class PlayerMoverment : MonoBehaviour
         return isDead;
 
     }
-    public void setDead(bool dead)
+    public void setDead(bool isDead)
     {
-        isDead = dead;
-
+        this.isDead = isDead;
     }
     private int GetState()
     {
         if (isDead) return Dead;
         if (isClimb) return Climb;
         if (!isGrounded) return Jump;
+        if (isGrounded && isShift && Mathf.Abs(moveHorizontal) > 0.1f) return SlowDown;
+        if (isGrounded && isShift) return Down;
         if (isGrounded) return Mathf.Abs(moveHorizontal) > 0.1f ? Run : Idle;
         else return Idle;
 
@@ -44,22 +54,26 @@ public class PlayerMoverment : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        moveSpeed = 500f;
+        characterTransform = transform;
+        moveSpeed = 450f;
+        slowMove = moveSpeed / 3;
         jumpForce = 25f;
         width = GetComponent<CapsuleCollider2D>().size.x;
         height = GetComponent<CapsuleCollider2D>().size.y;
         spacingRays = width / (numberOfRays - 1);
+        capsuleCollider = GetComponent<CapsuleCollider2D>();
+        defaultColliderSize = capsuleCollider.size;
     }
 
     void Update()
     {
-
-        // state animation
+        isShift = (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) ? true : false;
+        // State animation
         var state = GetState();
         if (state != currentState)
         {
             if (currentState == Dead) return;
-            anim.CrossFade(state, 0.03f, 0);
+            anim.CrossFade(state, 0.05f, 0);
             currentState = state;
 
         }
@@ -75,18 +89,40 @@ public class PlayerMoverment : MonoBehaviour
         if (moveHorizontal > 0f) isFacingRight = true;
         if (moveHorizontal < 0f) isFacingRight = false;
 
-        // Move up when climbing
-        if (isClimb)
-        {
-            rb.velocity = (new Vector2(0f, 5f));
-        }
-        //moverment
-        if (Mathf.Abs(moveHorizontal) > 0.1f)
+        // Moverment
+        if (Mathf.Abs(moveHorizontal) > 0.1f && !isShift)
         {
             rb.velocity = (new Vector2(moveHorizontal * Time.fixedDeltaTime * moveSpeed, rb.velocity.y));
             transform.rotation = Quaternion.Euler(new Vector3(0, moveHorizontal > 0 ? 0 : 180, 0));
-            //cach nay kha la lag
-            //transform.Translate(new Vector2(moveHorizontal, moveVertical) * moveSpeed * Time.deltaTime);
+        }
+        else
+        {
+            float deceleration = 13.5f;
+            rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0, deceleration * Time.deltaTime), rb.velocity.y);
+        }
+        // Moverment --- hold shift
+        //if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        //{
+        //    capsuleCollider.size = new Vector2(defaultColliderSize.x, ShiftedColliderHeight);
+        //}
+        //else
+        //{
+        //    capsuleCollider.size = defaultColliderSize;
+        //}
+        if (Mathf.Abs(moveHorizontal) > 0.1f && isShift)
+        {
+            transform.rotation = Quaternion.Euler(new Vector3(0, moveHorizontal > 0 ? 0 : 180, 0));
+            rb.velocity = (new Vector2(moveHorizontal * Time.fixedDeltaTime * slowMove, rb.velocity.y));
+        }
+        else
+        {
+            float deceleration = 13.5f;
+            rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0, deceleration * Time.deltaTime), rb.velocity.y);
+        }
+        // Moverment --- move up when climbing
+        if (isClimb)
+        {
+            rb.velocity = (new Vector2(0f, 5f));
         }
     }
 
@@ -106,21 +142,32 @@ public class PlayerMoverment : MonoBehaviour
     private static readonly int Jump = Animator.StringToHash("Player_JumpIn");
     private static readonly int Dead = Animator.StringToHash("Player_Dead");
     private static readonly int Climb = Animator.StringToHash("Player_Climb");
+    private static readonly int Down = Animator.StringToHash("Player_Down");
+    private static readonly int SlowDown = Animator.StringToHash("Player_SlowDown");
 
     #endregion
     private void checkOnGround()
     {
-        Vector2 rayOrigin = new Vector2(transform.position.x, transform.position.y);
-        float rayLength = height / 2 + 0.6f;
+        Vector2 rayOrigin = new Vector2(transform.position.x - width / 2, transform.position.y);
 
-        RaycastHit2D[] hits = Physics2D.RaycastAll(rayOrigin, Vector2.down, rayLength, groundLayer);
-        foreach (RaycastHit2D hit in hits)
+        bool anyRaycastHit = false;
+
+        for (int i = 0; i < numberOfRays; i++)
         {
-            Debug.DrawRay(hit.point, Vector2.down * 0.1f, Color.blue);
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, height / 2 + 0.1f, groundLayer);
+            Debug.DrawRay(rayOrigin, Vector2.down * (height / 2 + 0.1f), Color.blue);
+            rayOrigin.x += spacingRays;
+
+            if (hit.collider != null)
+            {
+                anyRaycastHit = true;
+                break;
+            }
         }
 
-        isGrounded = hits.Length > 0;
+        isGrounded = anyRaycastHit;
     }
+
 
 
 

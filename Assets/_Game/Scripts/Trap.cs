@@ -1,7 +1,10 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+public interface IDieable
+{
+    void setDead(bool isDead);
+}
 public class Trap : MonoBehaviour
 {
     private PlayerMoverment playerMoverment;
@@ -18,9 +21,17 @@ public class Trap : MonoBehaviour
     }
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        //if (collision.gameObject.CompareTag("Player"))
+        //{
+        //    playerMoverment.setDead(true);
+        //}
+        IDieable dieable = collision.GetComponent<IDieable>();
+
+        if (dieable != null)
         {
-            playerMoverment.setDead(true);
+            // Gọi phương thức "SetDead" và đặt là true
+            dieable.setDead(true);
         }
     }
+
 }

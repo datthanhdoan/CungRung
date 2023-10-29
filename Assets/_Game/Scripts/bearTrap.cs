@@ -7,7 +7,7 @@ public class bearTrap : Trap
 {
     private Animator anim;
     private Collider2D col;
-    private void Start()
+    protected override void Start()
     {
         base.Start();
         anim = GetComponent<Animator>();
@@ -16,7 +16,7 @@ public class bearTrap : Trap
     // Start is called before the first frame update
     private static readonly int BearTrapClose = Animator.StringToHash("BearTrap_Close");
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected override void OnTriggerEnter2D(Collider2D collision)
     {
         base.OnTriggerEnter2D(collision);
         anim.CrossFade(BearTrapClose, 0, 0);

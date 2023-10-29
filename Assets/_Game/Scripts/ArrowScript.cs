@@ -7,7 +7,7 @@ public class ArrowScript : MonoBehaviour
     private GameObject player;
     private Mob mob;
     private Rigidbody2D rb;
-    private float force = 15;
+    private float force = 25;
     private float timer;
     private PlayerMoverment playerMoverment;
 

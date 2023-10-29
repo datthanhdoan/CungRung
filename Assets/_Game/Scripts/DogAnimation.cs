@@ -28,13 +28,13 @@ public class DogAnimation : MonoBehaviour
     {
 
         if (playerMoverment.getDead()) return Idle;
-        return distance < distanceX ? Run : Idle;
+        if (dogmov.getDead()) return Dead;
+        return dogmov.getIsRunning() ? Run : Idle;
 
     }
     // Update is called once per frame
     void Update()
     {
-        distance = Vector2.Distance(transform.position, player.transform.position);
         var state = GetState();
         if (state != currentState)
         {

@@ -20,6 +20,10 @@ public class GameManagerScript : MonoBehaviour
         {
             gameOverUI();
         }
+        if (playerMoverment.getDead() && gameOverUi.activeSelf && Input.GetKeyDown("space"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
     public void gameOverUI()
     {
