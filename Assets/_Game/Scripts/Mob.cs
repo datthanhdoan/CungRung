@@ -53,8 +53,8 @@ public class Mob : MonoBehaviour, IDieable
     private void FixedUpdate()
     {
 
+        if (isDead) return;
         distanceY = distanceX / 2;
-
         Vector2 objectPosition = transform.position;
         Vector2 playerPosition = player.transform.position;
         deltaX = Mathf.Abs(objectPosition.x - playerPosition.x);

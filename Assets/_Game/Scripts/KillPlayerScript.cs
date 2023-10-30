@@ -7,6 +7,8 @@ using UnityEngine.UIElements;
 public class KillPlayerScript : MonoBehaviour
 {
     private PlayerMoverment playerMoverment;
+
+
     protected virtual void Start()
     {
         playerMoverment = FindObjectOfType<PlayerMoverment>();

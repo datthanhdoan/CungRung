@@ -26,6 +26,10 @@ public class PlayerMoverment : MonoBehaviour, IDieable
     private float spacingRays;
     private bool isGrounded = true;
     float slowMove;
+    // Effect
+    [SerializeField] ParticleSystem partical;
+    private bool hasBloodEffectPlayed = false;
+
 
     // animation
     [SerializeField] private Animator anim;
@@ -34,6 +38,18 @@ public class PlayerMoverment : MonoBehaviour, IDieable
     {
         return isDead;
 
+    }
+    public bool getGround()
+    {
+        return isGrounded;
+    }
+    public bool getClimb()
+    {
+        return isClimb;
+    }
+    public bool getShift()
+    {
+        return isShift;
     }
     public void setDead(bool isDead)
     {
@@ -77,7 +93,15 @@ public class PlayerMoverment : MonoBehaviour, IDieable
             currentState = state;
 
         }
-        if (isDead) return;
+        if (isDead)
+        {
+            if (!hasBloodEffectPlayed)
+            {
+                partical.Play();
+                hasBloodEffectPlayed = true;
+            }
+            return;
+        }
         moveHorizontal = Input.GetAxisRaw("Horizontal");
         checkOnGround();
         checkAHead();
