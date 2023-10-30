@@ -6,6 +6,7 @@ public class PlayerMoverment : MonoBehaviour, IDieable
     public Rigidbody2D rb;
     public LayerMask groundLayer;
     public LayerMask climbLayer;
+    private AudioManagerScript audioManagerScript;
     // Moverment
     private float moveSpeed;
     private float jumpForce;
@@ -29,6 +30,7 @@ public class PlayerMoverment : MonoBehaviour, IDieable
     // Effect
     [SerializeField] ParticleSystem partical;
     private bool hasBloodEffectPlayed = false;
+
 
 
     // animation
@@ -55,17 +57,31 @@ public class PlayerMoverment : MonoBehaviour, IDieable
     {
         this.isDead = isDead;
     }
+    private void Awake()
+    {
+        audioManagerScript = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManagerScript>();
+    }
     private int GetState()
     {
-        if (isDead) return Dead;
-        if (isClimb) return Climb;
+        if (isDead)
+        {
+            return Dead;
+        }
+        if (isClimb)
+        {
+            return Climb;
+        }
         if (!isGrounded) return Jump;
-        if (isGrounded && isShift && Mathf.Abs(moveHorizontal) > 0.1f) return SlowDown;
+        if (isGrounded && isShift && Mathf.Abs(moveHorizontal) > 0.1f)
+        {
+            return SlowDown;
+        }
         if (isGrounded && isShift) return Down;
         if (isGrounded) return Mathf.Abs(moveHorizontal) > 0.1f ? Run : Idle;
-        else return Idle;
+        return Idle;
 
     }
+
 
     void Start()
     {
@@ -97,6 +113,7 @@ public class PlayerMoverment : MonoBehaviour, IDieable
         {
             if (!hasBloodEffectPlayed)
             {
+                audioManagerScript.SoundEffect(audioManagerScript.deadth);
                 partical.Play();
                 hasBloodEffectPlayed = true;
             }

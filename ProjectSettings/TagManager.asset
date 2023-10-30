@@ -8,6 +8,7 @@ TagManager:
   - Mob
   - Lava
   - backgroundMusic
+  - Audio
   layers:
   - Default
   - TransparentFX

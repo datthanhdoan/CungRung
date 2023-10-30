@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,6 +9,7 @@ public class GameManagerScript : MonoBehaviour
     private PlayerMoverment playerMoverment;
     [SerializeField] private Animator anim;
     [SerializeField] private Animator[] animRev;
+    //[SerializeField] private AudioManagerScript audioManagerScript;
     void Start()
     {
         playerMoverment = FindObjectOfType<PlayerMoverment>();
@@ -32,17 +33,18 @@ public class GameManagerScript : MonoBehaviour
     }
     public void gameRestart()
     {
-        StartCoroutine(Load(SceneManager.GetActiveScene().buildIndex));
+        StartCoroutine(Load((int)SceneManager.GetActiveScene().buildIndex));
 
     }
     public void nextScreen()
     {
-        StartCoroutine(Load(SceneManager.GetActiveScene().buildIndex + 1));
+        StartCoroutine(Load((int)SceneManager.GetActiveScene().buildIndex + 1));
 
     }
     public void previousScreen()
     {
-        StartCoroutine(Load(SceneManager.GetActiveScene().buildIndex - 1));
+        Debug.Log("Load Preious Screen");
+        StartCoroutine(Load((int)SceneManager.GetActiveScene().buildIndex - 1));
     }
     public void Quit()
     {
@@ -59,6 +61,17 @@ public class GameManagerScript : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(1);
+
+        if (screenname != (int)SceneManager.GetActiveScene().buildIndex)
+        {
+            //    AudioManagerScript.instance.StopBackgroundMusic();
+            Destroy(AudioManagerScript.instance.gameObject);
+
+            //}
+            //else
+            //{
+            //    AudioManagerScript.instance = null;
+        }
         SceneManager.LoadScene(screenname);
         anim.CrossFade(TransStart, 0, 0, 0);
         if (animRev != null)

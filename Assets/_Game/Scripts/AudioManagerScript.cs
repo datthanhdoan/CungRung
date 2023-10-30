@@ -1,71 +1,50 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManagerScript : MonoBehaviour
 {
+    public static AudioManagerScript instance;
     private float audioTime;
-    private AudioClip currentStatePlayer, currentStateDog, currentStateRock;
-    private PlayerMoverment playerMoverment;
-    private DogMoverment dogmov;
-    [Header("SFX Effect")]
-    [SerializeField] private AudioSource SFXEffect;
-    [SerializeField] private AudioClip deadth;
-    [SerializeField] private AudioClip jump;
-    [SerializeField] private AudioClip climb;
-    [SerializeField] private AudioClip run;
-    [SerializeField] private AudioClip dogWol;
-    [SerializeField] private AudioClip rock;
+    private AudioClip currentStatePlayer, currentStateDog, currentStateDoor;
+    [Header("Audio Source")]
+    [SerializeField] private AudioSource SFXEffectSource;
+    [SerializeField] private AudioSource MusicSource;
+    [Header("Audio Clip")]
+    [SerializeField] private AudioClip backgroundMusic;
+    public AudioClip deadth;
+    public AudioClip jump;
+    public AudioClip climb;
+    public AudioClip run;
+    public AudioClip dogWol;
+    public AudioClip rock;
+    public AudioClip DoorOpen;
 
-    void Awake()
+
+    private void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     private void Start()
     {
-        playerMoverment = FindObjectOfType<PlayerMoverment>();
-        dogmov = FindObjectOfType<DogMoverment>();
-
+        MusicSource.clip = backgroundMusic;
+        MusicSource.Play();
+        MusicSource.loop = true;
     }
-    private AudioClip GetStatePlayer()
+    public void SoundEffect(AudioClip clip)
     {
-        if (playerMoverment.getDead()) return deadth;
-        if (playerMoverment.getClimb()) return climb;
-        if (!playerMoverment.getGround()) return jump;
-        //if (isGrounded && isShift && Mathf.Abs(moveHorizontal) > 0.1f) return SlowDown;
-        //if (isGrounded && isShift) return Down;
-        //if (isGrounded) return Mathf.Abs(moveHorizontal) > 0.1f ? Run : Idle;
-        else return null;
-
-    }
-    private AudioClip GetStateDog()
-    {
-        if (dogmov.getIsRunning()) return dogWol;
-        else return null;
-
-    }
-
-    private void Update()
-    {
-
-        // Player
-        var statePlayer = GetStatePlayer();
-        if (statePlayer != currentStatePlayer)
-        {
-            SFXEffect.PlayOneShot(statePlayer);
-            currentStatePlayer = statePlayer;
-        }
-        // Dog
-        var stateDog = GetStateDog();
-        if (stateDog != currentStateDog)
-        {
-            SFXEffect.PlayOneShot(stateDog);
-            currentStateDog = stateDog;
-        }
-
-
+        SFXEffectSource.PlayOneShot(clip);
     }
 
 
 
 }
+
