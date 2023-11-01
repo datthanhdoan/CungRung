@@ -17,6 +17,7 @@ public class AudioManagerScript : MonoBehaviour
     public AudioClip climb;
     public AudioClip run;
     public AudioClip dogWol;
+    public AudioClip dogHurt;
     public AudioClip rock;
     public AudioClip DoorOpen;
 

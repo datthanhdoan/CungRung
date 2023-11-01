@@ -11,6 +11,7 @@ public class PreviousDoor : MonoBehaviour
     private float timer = 0f;
     private bool doorOpen = false;
     private AudioManagerScript audioManagerScript;
+    private PlayerMoverment playerMoverment;
     private void Awake()
     {
         audioManagerScript = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManagerScript>();
@@ -19,6 +20,7 @@ public class PreviousDoor : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         gameManager = FindObjectOfType<GameManagerScript>();
+        playerMoverment = FindObjectOfType<PlayerMoverment>();
     }
     public bool getDoor()
     {
@@ -39,7 +41,7 @@ public class PreviousDoor : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && !playerMoverment.getDead())
         {
             audioManagerScript.SoundEffect(audioManagerScript.DoorOpen);
             anim.CrossFade(Open, 0, 0);

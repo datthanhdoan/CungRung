@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6807513935180764065}
   - component: {fileID: 8002515978765065785}
   - component: {fileID: 8169269776054627519}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: arrow_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,6 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a8b454566eab7d4b8d1d79b57c21dea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _lifetime: 5
 --- !u!70 &8002515978765065785
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -165,7 +166,7 @@ GameObject:
   - component: {fileID: 3499137369225262669}
   - component: {fileID: 4852071417917010712}
   - component: {fileID: 213714840275980174}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -439,8 +440,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.008
-      minScalar: 0.001
+      scalar: 0.02
+      minScalar: 0.008
       maxCurve:
         serializedVersion: 2
         m_Curve:

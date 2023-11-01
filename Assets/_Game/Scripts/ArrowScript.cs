@@ -9,6 +9,7 @@ public class ArrowScript : MonoBehaviour
     private Rigidbody2D rb;
     private float force = 25;
     private float timer;
+    [SerializeField] private float _lifetime = 1.2f;
     private PlayerMoverment playerMoverment;
 
     // Start is called before the first frame update
@@ -30,7 +31,7 @@ public class ArrowScript : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        if (timer > 1.2)
+        if (timer > _lifetime)
         {
             Destroy(gameObject);
         }

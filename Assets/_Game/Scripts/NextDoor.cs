@@ -8,6 +8,7 @@ public class NextDoor : MonoBehaviour
 
     private bool isKey = false;
     private Animator anim;
+    private PlayerMoverment playerMoverment;
     private GameManagerScript gameManager;
     private AudioManagerScript audioManagerScript;
     private float timer = 0f;
@@ -32,6 +33,7 @@ public class NextDoor : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         gameManager = FindObjectOfType<GameManagerScript>();
+        playerMoverment = FindObjectOfType<PlayerMoverment>();
     }
 
     void Update()
@@ -48,7 +50,7 @@ public class NextDoor : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player") && isKey)
+        if (collision.gameObject.CompareTag("Player") && isKey && !playerMoverment.getDead())
         {
             audioManagerScript.SoundEffect(audioManagerScript.DoorOpen);
             anim.CrossFade(Open, 0, 0);

@@ -9,7 +9,7 @@ public class BowShooting : MonoBehaviour
     public GameObject bullet;
     public GameObject player;
     public Transform bulletPos;
-
+    [SerializeField] private float _Distance = 30;
     private float timer;
 
     void Start()
@@ -21,7 +21,7 @@ public class BowShooting : MonoBehaviour
     void Update()
     {
         float distance = Vector2.Distance(transform.position, player.transform.position);
-        if (distance < 30)
+        if (distance < _Distance)
         {
             timer += Time.deltaTime;
             if (timer > 1)
