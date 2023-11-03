@@ -11,12 +11,15 @@ public class DogAnimation : MonoBehaviour
     [SerializeField] private Animator anim;
     private float distanceX, distance;
     private PlayerMoverment playerMoverment;
+    private AudioManagerScript audioManagerScript;
     private DogMoverment dogmov;
     private int currentState;
     private void Awake()
     {
         dogmov = FindObjectOfType<DogMoverment>();
         distanceX = dogmov.getDistanceX();
+        audioManagerScript = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManagerScript>();
+
     }
     private void Start()
     {
@@ -40,8 +43,17 @@ public class DogAnimation : MonoBehaviour
         {
             anim.CrossFade(state, 0, 0);
             currentState = state;
+            if (state == Run)
+            {
+                audioManagerScript.SoundEffect(audioManagerScript.dogWol);
+            }
+            if (state == Dead)
+            {
+                audioManagerScript.SoundEffect(audioManagerScript.dogDead);
+            }
 
         }
+
     }
     #region Animation Keys
     private static readonly int Dead = Animator.StringToHash("dog_die");

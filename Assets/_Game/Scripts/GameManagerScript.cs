@@ -36,6 +36,12 @@ public class GameManagerScript : MonoBehaviour
         StartCoroutine(Load((int)SceneManager.GetActiveScene().buildIndex));
 
     }
+    public void StartOnce()
+    {
+        Debug.Log("Load scene once");
+        StartCoroutine(Load(1));
+
+    }
     public void nextScreen()
     {
         StartCoroutine(Load((int)SceneManager.GetActiveScene().buildIndex + 1));

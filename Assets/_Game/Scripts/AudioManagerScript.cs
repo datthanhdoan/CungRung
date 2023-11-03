@@ -16,10 +16,15 @@ public class AudioManagerScript : MonoBehaviour
     public AudioClip jump;
     public AudioClip climb;
     public AudioClip run;
-    public AudioClip dogWol;
-    public AudioClip dogHurt;
     public AudioClip rock;
     public AudioClip DoorOpen;
+    [Header("Dog Clip")]
+    public AudioClip dogWol;
+    public AudioClip dogDead;
+    [Header("Bow Clip")]
+    public AudioClip BowShot;
+    [Header("Grenade Clip")]
+    public AudioClip Grenade;
 
 
     private void Awake()

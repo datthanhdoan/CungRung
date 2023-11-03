@@ -11,7 +11,11 @@ public class BowShooting : MonoBehaviour
     public Transform bulletPos;
     [SerializeField] private float _Distance = 30;
     private float timer;
-
+    private AudioManagerScript audioManagerScript;
+    private void Awake()
+    {
+        audioManagerScript = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManagerScript>();
+    }
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -24,10 +28,11 @@ public class BowShooting : MonoBehaviour
         if (distance < _Distance)
         {
             timer += Time.deltaTime;
-            if (timer > 1)
+            if (timer > 1.8)
             {
                 timer = 0;
                 Shoot();
+                audioManagerScript.SoundEffect(audioManagerScript.BowShot);
             }
         }
 

@@ -5122,6 +5122,8 @@ MonoBehaviour:
   jump: {fileID: 0}
   climb: {fileID: 0}
   run: {fileID: 0}
-  dogWol: {fileID: 8300000, guid: 69d5d2fe22c9012419eb0d292ed56d20, type: 3}
   rock: {fileID: 8300000, guid: 99ccea8320409b54c99ed8eef68ef19c, type: 3}
   DoorOpen: {fileID: 8300000, guid: 8562f5530125c1446abc7442994e13fa, type: 3}
+  dogWol: {fileID: 8300000, guid: 69d5d2fe22c9012419eb0d292ed56d20, type: 3}
+  dogDead: {fileID: 8300000, guid: 03ab4cac6a30e4f4fa26127069e07ee9, type: 3}
+  BowShot: {fileID: 8300000, guid: 3df5c9e6b46763347bcfe26b2aec02b8, type: 3}

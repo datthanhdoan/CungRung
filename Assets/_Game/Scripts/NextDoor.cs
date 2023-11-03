@@ -6,7 +6,7 @@ using UnityEngine;
 public class NextDoor : MonoBehaviour
 {
 
-    private bool isKey = false;
+    private bool isKey = true;
     private Animator anim;
     private PlayerMoverment playerMoverment;
     private GameManagerScript gameManager;
